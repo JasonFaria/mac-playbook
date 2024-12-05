@@ -1,0 +1,78 @@
+---
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 12 * * 3"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install yamllint ansible ansible-lint
+
+      - name: Lint code
+        run: |
+          yamllint .
+          ansible-lint
+
+  integration:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-14, macos-15]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Uninstall default Homebrew
+        run: tests/uninstall-homebrew.sh
+
+      - name: Uninstall default browsers
+        run: |
+          sudo rm -rf /Applications/Google\ Chrome.app
+          sudo rm -rf /Applications/Firefox.app
+          sudo rm -rf /usr/local/bin/firefox
+
+      - name: Install test dependencies
+        run: |
+          sudo pip3 install --upgrade pip
+          sudo pip3 install ansible
+
+      - name: Setup Ansible test environment
+        run: |
+          cp tests/ansible.cfg ./ansible.cfg
+          cp tests/inventory ./inventory
+          cp tests/config.yml ./config.yml
+          ansible-galaxy install -r requirements.yml
+
+      - name: Test the Ansible syntax
+        run: ansible-playbook main.yml --syntax-check
+
+      - name: Test Ansible playbook
+        run: ansible-playbook main.yml -i inventory --ask-become-pass
+        env:
+          ANSIBLE_FORCE_COLOR: "true"
+
+      - name: Verify idempotence for a secondary run
+        run: |
+          idempotence=$(mktemp)
+          ansible-playbook main.yml -i inventory --extra-vars idempotence=$idempotence --ask-become-pass | tee -a $idempotence
+          tail $idempotence | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+        env:
+          ANSIBLE_FORCE_COLOR: "true"
