@@ -45,7 +45,9 @@ jobs:
 
       - name: Uninstall default browsers
         run: |
-          brew uninstall --zap --ignore-dependencies google-chrome firefox
+          sudo rm -rf /Applications/Google\ Chrome.app
+          sudo rm -rf /Applications/Firefox.app
+          sudo rm -rf /usr/local/bin/firefox
 
       - name: Install test dependencies
         run: |
