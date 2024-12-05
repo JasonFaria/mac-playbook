@@ -2,4 +2,4 @@
 .env
 ansible-env/
 roles/
-config.yml
+/config.yml
