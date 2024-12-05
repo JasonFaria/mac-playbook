@@ -59,5 +59,5 @@ pip3 install virtualenv
 ### Run Ansible playbook
 
 ```bash
-ansible-playbook main.yml -i inventory.yml --ask-become-pass
+ansible-playbook main.yml -i inventory --ask-become-pass
 ```
