@@ -2,6 +2,8 @@
 homebrew_installed_packages:
   - git
   - gh
+  - kubectl
+  - minikube
   - nmap
   - node
   - openssl
