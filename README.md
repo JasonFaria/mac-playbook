@@ -1,6 +1,13 @@
-# 
+# Mac Setup using Ansible
 
-# Install Homebrew
+This playbook is used to setup my Mac for general development purposes.
+
+
+## Setup
+
+The following instructions used to setup and execute the playbook.
+
+### Install Homebrew
 
 Verify if Homebrew is installed:
 ```bash
@@ -14,7 +21,7 @@ If Homebrew is not there, install Homewbrew by running:
 
 Follow the instructions from installing Homebrew to add it to your path.
 
-# Install Python
+### Install Python
 
 Verify if Python is installedi:
 
@@ -35,7 +42,7 @@ For a specific version:
 # replace version with the version you want to use (i.e. 3.9)
 brew install python@version
 ```
-# Install Ansible
+### Install Ansible
 
 Install Ansible using Homebrew:
 
@@ -43,13 +50,13 @@ Install Ansible using Homebrew:
 brew install ansible
 ```
 
-# Setup virtualenv for isolating Python dependencies
+### Setup virtualenv for isolating Python dependencies
 
 ```bash
 pip3 install virtualenv
 ```
 
-# Run Ansible playbook
+### Run Ansible playbook
 
 ```bash
 ansible-playbook main.yml -i inventory.yml --ask-become-pass
