@@ -57,7 +57,7 @@ jobs:
       - name: Setup Ansible test environment
         run: |
           cp tests/ansible.cfg ./ansible.cfg
-          cp tests/inventory /inventory
+          cp tests/inventory ./inventory
           cp tests/config.yml ./config.yml
           ansible-galaxy install -r requirements.yml
 
