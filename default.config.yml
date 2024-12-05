@@ -1,0 +1,19 @@
+---
+homebrew_installed_packages:
+  - git
+  - gh
+  - nmap
+  - node
+  - openssl
+  - skaffold
+  - wget
+
+homebrew_taps: []
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+  - cursor
+  - docker
+  - dropbox
+  - google-chrome
+  - slack

@@ -1,0 +1,5 @@
+.DS_Store
+.env
+ansible-env/
+roles/
+config.yml
