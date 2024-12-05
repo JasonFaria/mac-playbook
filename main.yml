@@ -15,4 +15,3 @@
       with_fileglob:
         - "{{ playbook_dir }}/config.yml"
       tags: ['always']
-

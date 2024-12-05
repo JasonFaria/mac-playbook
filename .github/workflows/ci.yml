@@ -55,7 +55,7 @@ jobs:
       - name: Setup Ansible test environment
         run: |
           cp tests/ansible.cfg ./ansible.cfg
-          cp tests/inventory ./inventory
+          cp tests/inventory.yml ./inventory.yml
           cp tests/config.yml ./config.yml
           ansible-galaxy install -r requirements.yml
 
@@ -63,14 +63,14 @@ jobs:
         run: ansible-playbook main.yml --syntax-check
 
       - name: Test Ansible playbook
-        run: ansible-playbook main.yml -i inventory --ask-become-pass
+        run: ansible-playbook main.yml -i inventory.yml --ask-become-pass
         env:
           ANSIBLE_FORCE_COLOR: "true"
 
       - name: Verify idempotence for a secondary run
         run: |
           idempotence=$(mktemp)
-          ansible-playbook main.yml -i inventory --extra-vars idempotence=$idempotence --ask-become-pass | tee -a $idempotence
+          ansible-playbook main.yml -i inventory.yml --extra-vars idempotence=$idempotence --ask-become-pass | tee -a $idempotence
           tail $idempotence | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
         env:
           ANSIBLE_FORCE_COLOR: "true"
